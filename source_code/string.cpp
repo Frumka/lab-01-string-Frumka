@@ -16,13 +16,14 @@ String::String() {
 
 String::String(const String &rhs) {
     Data = nullptr;
-    *this = rhs;
+    *this = rhs;   //0x602000000451
 }
 
 String::String(const char *data) {
     size_t ind = 0;
     while (data[ind]) ind++;
-    capasity = size_t((ind) * 1.5);
+    //capasity = size_t((ind) * 1.5);
+    capasity = ind+1;
     Data = nullptr;
     if (capasity != 0) {
         Data = reinterpret_cast<char *>(calloc(capasity, sizeof(char)));
@@ -34,7 +35,8 @@ String::String(const char *data) {
 
 String &String::operator=(const String &rhs) {
     if (this != &rhs) {
-        capasity = size_t((rhs.Size()) * 1.5);
+        //capasity = size_t((rhs.Size()) * 1.5);
+        capasity = rhs.Size()+1;
         Data = reinterpret_cast<char *>(calloc(capasity, sizeof(char)));
         int ind = 0;
         while (rhs[ind] != 0) {
@@ -51,7 +53,8 @@ String &String::operator=(const String &rhs) {
 /// <returns>Возвращаем ссылку на себя</returns>
 String &String::operator+=(const String &rhs) {
     if (capasity < this->Size() + rhs.Size() + 1) {
-        capasity = size_t((capasity + rhs.Size() + 1) * 1.5);
+        //capasity = size_t((capasity + rhs.Size() + 1) * 1.5);
+        capasity = capasity + rhs.Size();
         Data = reinterpret_cast<char *>(realloc(Data, capasity));
     }
     size_t tempSize = this->Size(), rhSize = rhs.Size();
@@ -72,7 +75,8 @@ String &String::operator+=(const char *rhs) {
     while (rhs[len]) len++;
 
     if (capasity < thisSize + len + 1) {
-        capasity = size_t((capasity + len + 1) * 1.5);
+        //capasity = size_t((capasity + len + 1) * 1.5);
+        capasity = capasity + len + 1;
         Data = reinterpret_cast<char *>(realloc(Data, capasity));
     }
     thisSize = this->Size();
@@ -86,7 +90,8 @@ String &String::operator+=(const char *rhs) {
 /// <returns>Возвращаем ссылку на себя</returns>
 String &String::operator*=(unsigned int m) {
     if (capasity < this->Size() * m + 1) {
-        capasity = size_t(this->Size() * m * 1.5 + 1);
+        //capasity = size_t(this->Size() * m * 1.5 + 1);
+        capasity = this->Size()*m + 1;
         Data = reinterpret_cast<char *>(realloc(Data, capasity));
     }
     size_t startSize = this->Size();
@@ -190,7 +195,7 @@ size_t String::Size() const {
 
 /// Функция для определения пуста ли строка
 bool String::Empty() const {
-    return Data == nullptr;
+    return (Data[0] == 0);
 }
 
 /// Оператор []
@@ -259,7 +264,7 @@ void String::swap(String &oth) {
 }
 
 void String::shrink_to_fit() {
-    capasity = this->Size();
+    capasity = this->Size() + 1;
     Data = reinterpret_cast<char *>(realloc(Data, capasity));
 }
 
