@@ -62,7 +62,7 @@ TEST(String, Size) {
   String s1("some");
 
   EXPECT_EQ(s1.Size(), 4);
-  EXPECT_TRUE(String{}.Empty());
+  EXPECT_TRUE(String("").Empty());
 
   EXPECT_FALSE(s1.Empty());
 }

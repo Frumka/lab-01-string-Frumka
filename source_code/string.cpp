@@ -20,6 +20,10 @@ String::String(const char *data) {
     size_t ind = 0;
     while (data[ind]) ind++;
     capasity = size_t(ind * 1.5);
+    if (capasity == 0){
+        Data = nullptr;
+        return;
+    }
     Data = new char[capasity];
     for (size_t i = 0; i < ind + 2; i++) {
         Data[i] = data[i];
