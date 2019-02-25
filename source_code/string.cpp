@@ -6,7 +6,7 @@
 String::~String() {
     for (size_t i = 0; i < capasity; i++) Data[i] = 0;
     Data = nullptr;
-    free(Data);
+    delete[] Data;
     capasity = 0;
 }
 
@@ -26,7 +26,7 @@ String::String(const char *data) {
     capasity = ind + 1;
     Data = nullptr;
     if (capasity != 0) {
-        Data = reinterpret_cast<char *>(calloc(capasity, sizeof(char)));
+        Data = new char[capasity];
         for (size_t i = 0; i <= ind; i++) {
             Data[i] = data[i];
         }
@@ -37,7 +37,7 @@ String &String::operator=(const String &rhs) {
     if (this != &rhs) {
         //capasity = size_t((rhs.Size()) * 1.5);
         capasity = rhs.Size()+1;
-        Data = reinterpret_cast<char *>(calloc(capasity, sizeof(char)));
+        Data = new char[capasity];
         int ind = 0;
         while (rhs[ind] != 0) {
             Data[ind] = rhs[ind];
@@ -55,7 +55,13 @@ String &String::operator+=(const String &rhs) {
     if (capasity < this->Size() + rhs.Size() + 1) {
         //capasity = size_t((capasity + rhs.Size() + 1) * 1.5);
         capasity = capasity + rhs.Size();
-        Data = reinterpret_cast<char *>(realloc(Data, capasity));
+        char* temp = new char[capasity];
+        for(size_t i=0;i<capasity;i++){
+            temp[i] = Data[i];
+        }
+        delete[] Data;
+        Data = temp;
+        temp = nullptr;
     }
     size_t tempSize = this->Size(), rhSize = rhs.Size();
     for (size_t ind = tempSize, i = 0; ind <= tempSize + \
@@ -76,8 +82,15 @@ String &String::operator+=(const char *rhs) {
 
     if (capasity < thisSize + len + 1) {
         //capasity = size_t((capasity + len + 1) * 1.5);
-        capasity = capasity + len; //+1
-        Data = reinterpret_cast<char *>(realloc(Data, capasity));
+        capasity = capasity + len + 1; //+1
+        //Data = reinterpret_cast<char *>(realloc(Data, capasity));
+        char *tmp = new char[capasity];
+        for(size_t i=0;i<capasity;i++){
+            tmp[i] = Data[i];
+        }
+        delete[] Data;
+        Data = tmp;
+        tmp = nullptr;
     }
     thisSize = this->Size();
     for (size_t ind = thisSize, i = 0; i <= len; ind++) {
@@ -92,7 +105,14 @@ String &String::operator*=(unsigned int m) {
     if (capasity < this->Size() * m + 1) {
         //capasity = size_t(this->Size() * m * 1.5 + 1);
         capasity = this->Size() * m + 1;
-        Data = reinterpret_cast<char *>(realloc(Data, capasity));
+        //Data = reinterpret_cast<char *>(realloc(Data, capasity));
+        char *tmp = new char[capasity];
+        for(size_t i=0;i<capasity;i++){
+            tmp[i]=Data[i];
+        }
+        delete[] Data;
+        Data = tmp;
+        tmp = nullptr;
     }
     size_t startSize = this->Size();
     for (size_t ind = this->Size(); ind < startSize * m; ind++) {
@@ -265,7 +285,14 @@ void String::swap(String &oth) {
 
 void String::shrink_to_fit() {
     capasity = this->Size() + 1;
-    Data = reinterpret_cast<char *>(realloc(Data, capasity));
+    //Data = reinterpret_cast<char *>(realloc(Data, capasity));
+    char *tmp = new char[capasity];
+    for(size_t i=0;i<capasity;i++){
+        tmp[i] = Data[i];
+    }
+    delete[] Data;
+    Data = tmp;
+    tmp = nullptr;
 }
 
 ///outer-class functions
@@ -283,7 +310,8 @@ void String::shrink_to_fit() {
 String operator+(const String &a, const String &b) {
     size_t aSz = a.Size(), bSz = b.Size();
     size_t full = aSz + bSz + 1;
-    char *tmp = static_cast<char *>(calloc(full, sizeof(char)));
+    //char *tmp = static_cast<char *>(calloc(full, sizeof(char)));
+    char *tmp = new char[full];
     for (size_t ind = 0; ind < full; ind++) {
         if (ind < aSz) {
             tmp[ind] = a[ind];
@@ -292,7 +320,7 @@ String operator+(const String &a, const String &b) {
         }
     }
     String itog(tmp);
-    free(tmp);
+    delete []tmp;
     return itog;
 }
 
@@ -305,7 +333,8 @@ String operator+(const String &a, const String &b) {
 /// </example>
 String operator*(const String &a, unsigned int b) {
     size_t thisSize = a.Size();
-    char *tmp = static_cast<char *>(calloc(thisSize * b + 1, sizeof(char)));
+    //char *tmp = static_cast<char *>(calloc(thisSize * b + 1, sizeof(char)));
+    char *tmp = new char[thisSize*b +1];
     for (size_t i = 0; i < b; i++) {
         for (size_t j = 0; j < thisSize; j++) {
             tmp[j + i * thisSize] = a[j];
