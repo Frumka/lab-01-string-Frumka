@@ -29,7 +29,7 @@ String::String(const char *data) {
     Data = nullptr;
     if (capasity != 0) {
         Data = reinterpret_cast<char *>(calloc(capasity, sizeof(char)));
-        for (size_t i = 0; i <= ind; i++) {
+        for (size_t i = 0; i < ind; i++) {
             Data[i] = data[i];
         }
     }
