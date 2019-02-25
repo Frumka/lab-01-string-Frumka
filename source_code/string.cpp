@@ -154,8 +154,21 @@ size_t String::Find(const String &substr) const {
 /// <returns>Возвращаем позицию substr. Если подстрока не найдена, то
 /// возвратить -1</returns>
 size_t String::Find(const char *str) const {
-    String temp(str);
-    return this->Find(temp);
+    size_t subSize = 0;
+    while(str[subSize]) subSize++;
+    size_t thisSize = this->Size();
+    for(size_t i=0;i<thisSize;i++){
+        if (Data[i] != str[0]) continue;
+        for (size_t j=0;j<subSize;j++){
+            if (i + j > thisSize) return static_cast<size_t>(-1);
+            if (Data[i + j] != str[j]) break;
+            else if (j == subSize - 1) return i;
+        }
+
+
+    }
+
+    return static_cast<size_t>(-1);
 }
 
 /// Функция замены символов, заменяет все символы oldSymbol на newSymbol.
