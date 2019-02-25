@@ -24,7 +24,6 @@ String::String(const char *data) {
         Data = nullptr;
         return;
     }
-    delete[] Data;
     Data = new char[capasity];
     for (size_t i = 0; i < ind; i++) {
         Data[i] = data[i];
