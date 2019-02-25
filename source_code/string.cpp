@@ -97,8 +97,7 @@ bool String::operator==(const String &rhs) const {
         if (Data[ind] == rhs[ind]) {
             ind++;
             continue;
-        }
-        else
+        }else
             return false;
     }
     return true;
@@ -114,8 +113,7 @@ bool String::operator<(const String &rhs) const {
         if (Data[ind] < rhs[ind]) {
             ind++;
             continue;
-        }
-        else
+        }else
             return false;
     }
     return true;
