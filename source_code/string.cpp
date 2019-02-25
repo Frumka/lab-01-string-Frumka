@@ -3,6 +3,11 @@
 
 #include "../include/string.hpp"
 
+
+void *reallocate(void *ptr, size_t newsize) {
+    return (realloc(ptr, newsize));
+}
+
 String::~String() {
     delete[]Data;
     capasity = 0;
@@ -18,16 +23,27 @@ String::String(const String &rhs) {
 }
 
 String::String(const char *data) {
-    size_t ind = 0;
+/*    size_t ind = 0;
     while (data[ind]) ind++;
     capasity = size_t((ind) * 1.5);
     if (capasity == 0) {
         Data = nullptr;
         return;
     }
-    Data = new char[ind];
+    Data = new char[capasity];
     for (size_t i = 0; i <= ind; i++) {
         Data[i] = data[i];
+    }*/
+    if (data[0] == 0) {
+        Data = nullptr;
+        capasity = 0;
+    }
+    int i;
+    for (i = 0; data[i] != '\0'; i++) {
+    }
+    Data = new char[i + 1];
+    for (int a = 0; a <= i; a++) {
+        Data[a] = data[a];
     }
 }
 
@@ -201,7 +217,7 @@ size_t String::Size() const {
 
 /// Функция для определения пуста ли строка
 bool String::Empty() const {
-    return Data == nullptr;
+    return (Data == nullptr || *this == String(""));
 }
 
 /// Оператор []
