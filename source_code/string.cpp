@@ -159,18 +159,15 @@ String &String::operator*=(unsigned int m) {
     //Data[startSize * m] = 0;
     return (*this);*/
     capasity = Size() * m + 1;
+    size_t size = Size();
     char *tmp = new char[capasity];
     for (size_t i = 0; i < capasity; i++) {
-        tmp[i] = Data[i];
+        tmp[i] = Data[i%size];
     }
+    tmp[size*m] = 0;
     delete[] Data;
     Data = tmp;
-    tmp = nullptr;
-    size_t len = Size();
-    for (size_t i = Size(); i < len * m; i++) {
-        Data[i] = Data[i % len];
-    }
-    Data[len * m] = 0;
+
     return (*this);
 }
 
