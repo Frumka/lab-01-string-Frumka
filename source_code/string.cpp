@@ -20,16 +20,21 @@ String::String(const String &rhs) {
 }
 
 String::String(const char *data) {
-    size_t ind = 0;
-    while (data[ind]) ind++;
-    //capasity = size_t((ind) * 1.5);
-    capasity = ind + 1;
-    Data = nullptr;
-    if (capasity != 0) {
-        Data = new char[capasity];
-        for (size_t i = 0; i <= ind; i++) {
-            Data[i] = data[i];
-        }
+    /*  size_t ind = 0;
+      while (data[ind]) ind++;
+      //capasity = size_t((ind) * 1.5);
+      capasity = ind + 1;
+      Data = nullptr;
+      if (capasity != 0) {
+          Data = new char[capasity];
+          for (size_t i = 0; i <= ind; i++) {
+              Data[i] = data[i];
+          }*/
+    size_t ind;
+    for (ind = 0; data[ind] != 0; ind++) continue;
+    Data = new char[ind + 1];
+    for (size_t i = 0; i <= ind; i++) {
+        Data[i] = data[i];
     }
 }
 
@@ -92,27 +97,44 @@ String &String::operator+=(const String &rhs) {
 /// <param name="rhs">Объект, который стоит после знака '+=' </param>
 /// <returns>Возвращаем ссылку на себя</returns>
 String &String::operator+=(const char *rhs) {
-    size_t len = 0;
-    size_t thisSize = this->Size();
-    while (rhs[len]) len++;
+    /* size_t len = 0;
+     size_t thisSize = this->Size();
+     while (rhs[len]) len++;
 
-    if (capasity < thisSize + len + 1) {
-        //capasity = size_t((capasity + len + 1) * 1.5);
-        capasity = capasity + len + 1; //+1
-        //Data = reinterpret_cast<char *>(realloc(Data, capasity));
-        char *tmp = new char[capasity];
-        for (size_t i = 0; i < capasity; i++) {
-            tmp[i] = Data[i];
+     if (capasity < thisSize + len + 1) {
+         //capasity = size_t((capasity + len + 1) * 1.5);
+         capasity = capasity + len + 1; //+1
+         //Data = reinterpret_cast<char *>(realloc(Data, capasity));
+         char *tmp = new char[capasity];
+         for (size_t i = 0; i < capasity; i++) {
+             tmp[i] = Data[i];
+         }
+         delete[] Data;
+         Data = tmp;
+         tmp = nullptr;
+     }
+     thisSize = this->Size();
+     for (size_t ind = thisSize, i = 0; i <= len; ind++) {
+         Data[ind] = rhs[i++];
+     }
+     return (*this);*/
+    size_t thisSize = Size();
+    size_t ind;
+    for (ind = 0; rhs[ind] != 0; ind++) {
+    }
+    size_t fSize = thisSize + ind + 1;
+    char *temp = new char[fSize];
+    for (size_t ind2 = 0; ind2 < fSize; ind2++) {
+        if (ind2 < thisSize) {
+            temp[ind2] = Data[ind2];
+        } else {
+            temp[ind2] = rhs[ind2 - thisSize];
         }
-        delete[] Data;
-        Data = tmp;
-        tmp = nullptr;
     }
-    thisSize = this->Size();
-    for (size_t ind = thisSize, i = 0; i <= len; ind++) {
-        Data[ind] = rhs[i++];
-    }
-    return (*this);
+    if (!Empty()) delete[] Data;
+    Data = temp;
+    temp = nullptr;
+    return *this;
 }
 
 /// Оператор *=
