@@ -50,7 +50,13 @@ String &String::operator=(const String &rhs) {
 String &String::operator+=(const String &rhs) {
     if (capasity < this->Size() + rhs.Size() + 1) {
         capasity = size_t((capasity + rhs.Size() + 1) * 1.5);
-        Data = reinterpret_cast<char *>(realloc(Data, capasity));
+        //Data = reinterpret_cast<char *>(realloc(Data, capasity));
+        char *temp = new char[capasity];
+        for (size_t ind=0;ind <= this->Size();ind++){
+            temp[ind]=Data[ind];
+        }
+        delete[] Data;
+        Data = temp;
     }
     for (size_t ind = this->Size() + 1, i = 0; ind <= this->Size() + \
     rhs.Size() + 1; ind++, i++) {
@@ -69,7 +75,13 @@ String &String::operator+=(const char *rhs) {
 
     if (capasity < this->Size() + len + 1) {
         capasity = size_t((capasity + len + 1) * 1.5);
-        Data = reinterpret_cast<char *>(realloc(Data, capasity));
+        //Data = reinterpret_cast<char *>(realloc(Data, capasity));
+        char *temp = new char[capasity];
+        for (size_t ind=0;ind <= this->Size();ind++){
+            temp[ind]=Data[ind];
+        }
+        delete[] Data;
+        Data = temp;
     }
     for (size_t ind = this->Size(), i = 0; i <= len; ind++) {
         Data[ind] = rhs[i++];
@@ -82,7 +94,13 @@ String &String::operator+=(const char *rhs) {
 String &String::operator*=(unsigned int m) {
     if (capasity < this->Size() * m + 1) {
         capasity = size_t(this->Size() * m * 1.5 + 1);
-        Data = reinterpret_cast<char *>(realloc(Data, capasity));
+        //Data = reinterpret_cast<char *>(realloc(Data, capasity));
+        char *temp = new char[capasity];
+        for (size_t ind=0;ind <= this->Size();ind++){
+            temp[ind]=Data[ind];
+        }
+        delete[] Data;
+        Data = temp;
     }
     size_t startSize = this->Size();
     for (size_t ind = this->Size(); ind < startSize * m; ind++) {
@@ -238,7 +256,14 @@ void String::swap(String &oth) {
 }
 
 void String::shrink_to_fit() {
-    Data = reinterpret_cast<char *>(realloc(Data, this->Size() + 1));
+    //Data = reinterpret_cast<char *>(realloc(Data, this->Size() + 1));
+    capasity = this->Size() + 1;
+    char *temp = new char[capasity];
+    for (size_t ind=0;ind <= this->Size();ind++){
+        temp[ind]=Data[ind];
+    }
+    delete[] Data;
+    Data = temp;
 }
 
 ///outer-class functions
