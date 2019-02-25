@@ -276,9 +276,19 @@ void String::shrink_to_fit() {
 /// </example>
 /// <returns>Возвращаем строку равную a + b</returns>
 String operator+(const String &a, const String &b) {
-    String temp(a);
-    temp += b;
-    return temp;
+    size_t aSz = a.Size(), bSz = b.Size();
+    size_t full = aSz + bSz + 1;
+    char* tmp = static_cast<char*>(calloc(full,sizeof(char)));
+    for(size_t ind = 0;ind<full;ind++){
+        if (ind<aSz){
+            tmp[ind] = a[ind];
+        }else{
+            tmp[ind] = b[ind - aSz-1];
+        }
+    }
+    String itog(tmp);
+    free(tmp);
+    return itog;
 }
 
 /// Оператор *
@@ -289,9 +299,17 @@ String operator+(const String &a, const String &b) {
 /// </code>
 /// </example>
 String operator*(const String &a, unsigned int b) {
-    String temp(a);
-    temp *= b;
-    return temp;
+    size_t thisSize = a.Size();
+    char* tmp = static_cast<char*>(calloc(thisSize * b +1,sizeof(char)));
+    for (size_t i =0;i < b;i++){
+        for(size_t j = 0; j<thisSize;j++){
+            tmp[j+i*thisSize] = a[j];
+        }
+    }
+    tmp[thisSize*b] = 0;
+    String tmpNew(tmp);
+    delete []tmp;
+    return tmpNew;
 }
 
 /// Оператор !=
@@ -318,6 +336,10 @@ std::ostream &operator<<(std::ostream &out, const String &str) {
 /// Все ради тебя, тревис (；⌣̀_⌣́)
 
 bool operator==(const char *ls, const String &rs) {
-    String temp(ls);
-    return (temp == rs);
+    size_t ind = 0;
+    while (ls[ind] || rs[ind]){
+        if (ls[ind] != rs[ind]) return false;
+        ind++;
+    }
+    return true;
 }
