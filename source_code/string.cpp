@@ -57,6 +57,7 @@ String &String::operator+=(const String &rhs) {
         }
         delete[] Data;
         Data = temp;
+        temp = nullptr;
     }
     for (size_t ind = this->Size() + 1, i = 0; ind <= this->Size() + \
     rhs.Size() + 1; ind++, i++) {
@@ -82,6 +83,7 @@ String &String::operator+=(const char *rhs) {
         }
         delete[] Data;
         Data = temp;
+        temp = nullptr;
     }
     for (size_t ind = this->Size(), i = 0; i <= len; ind++) {
         Data[ind] = rhs[i++];
@@ -101,6 +103,7 @@ String &String::operator*=(unsigned int m) {
         }
         delete[] Data;
         Data = temp;
+        temp = nullptr;
     }
     size_t startSize = this->Size();
     for (size_t ind = this->Size(); ind < startSize * m; ind++) {
@@ -265,6 +268,7 @@ void String::shrink_to_fit() {
     }
     delete[] Data;
     Data = temp;
+    temp = nullptr;
 }
 
 ///outer-class functions
