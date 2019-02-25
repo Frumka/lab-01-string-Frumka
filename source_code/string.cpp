@@ -13,13 +13,14 @@ String::String() {
 }
 
 String::String(const String &rhs) {
+    Data = nullptr;
     *this = rhs;
 }
 
 String::String(const char *data) {
     size_t ind = 0;
     while (data[ind]) ind++;
-    capasity = size_t(ind * 1.5);
+    capasity = size_t((ind) * 1.5);
     if (capasity == 0) {
         Data = nullptr;
         return;
@@ -28,12 +29,11 @@ String::String(const char *data) {
     for (size_t i = 0; i <= ind; i++) {
         Data[i] = data[i];
     }
-    this->shrink_to_fit();
 }
 
 String &String::operator=(const String &rhs) {
     if (this != &rhs) {
-        capasity = size_t(rhs.Size() * 1.5);
+        capasity = size_t((rhs.Size()) * 1.5);
         Data = new char[capasity];
         int ind = 0;
         while (rhs[ind] != 0) {
@@ -53,15 +53,17 @@ String &String::operator+=(const String &rhs) {
         capasity = size_t((capasity + rhs.Size() + 1) * 1.5);
         //Data = reinterpret_cast<char *>(realloc(Data, capasity));
         auto *temp = new char[capasity];
-        for (size_t ind = 0; ind <= this->Size(); ind++) {
+        size_t tempSize = this->Size();
+        for (size_t ind = 0; ind <= tempSize; ind++) {
             temp[ind] = Data[ind];
         }
         delete[] Data;
         Data = temp;
         temp = nullptr;
     }
-    for (size_t ind = this->Size() + 1, i = 0; ind <= this->Size() + \
-    rhs.Size() + 1; ind++, i++) {
+    size_t tempSize = this->Size(), rhSize = rhs.Size();
+    for (size_t ind = tempSize + 1, i = 0; ind <= tempSize + \
+    rhSize + 1; ind++, i++) {
         Data[ind] = rhs[i];
     }
     return (*this);
@@ -73,20 +75,22 @@ String &String::operator+=(const String &rhs) {
 /// <returns>Возвращаем ссылку на себя</returns>
 String &String::operator+=(const char *rhs) {
     size_t len = 0;
+    size_t thisSize = this->Size();
     while (rhs[len]) len++;
 
-    if (capasity < this->Size() + len + 1) {
+    if (capasity < thisSize + len + 1) {
         capasity = size_t((capasity + len + 1) * 1.5);
         //Data = reinterpret_cast<char *>(realloc(Data, capasity));
         auto *temp = new char[capasity];
-        for (size_t ind = 0; ind <= this->Size(); ind++) {
+        for (size_t ind = 0; ind <= thisSize; ind++) {
             temp[ind] = Data[ind];
         }
         delete[] Data;
         Data = temp;
         temp = nullptr;
     }
-    for (size_t ind = this->Size(), i = 0; i <= len; ind++) {
+    thisSize = this->Size();
+    for (size_t ind = thisSize, i = 0; i <= len; ind++) {
         Data[ind] = rhs[i++];
     }
     return (*this);
@@ -99,7 +103,8 @@ String &String::operator*=(unsigned int m) {
         capasity = size_t(this->Size() * m * 1.5 + 1);
         //Data = reinterpret_cast<char *>(realloc(Data, capasity));
         auto *temp = new char[capasity];
-        for (size_t ind = 0; ind <= this->Size(); ind++) {
+        size_t thisSize = this->Size();
+        for (size_t ind = 0; ind <= thisSize; ind++) {
             temp[ind] = Data[ind];
         }
         delete[] Data;
@@ -152,12 +157,14 @@ bool String::operator<(const String &rhs) const {
 /// <returns>Возвращаем позицию substr. Если подстрока не найдена, то
 /// возвратить -1</returns>
 size_t String::Find(const String &substr) const {
-    for (size_t ind = 0; ind < this->Size(); ind++) {
+    size_t thisSize = this->Size();
+    size_t subSize = substr.Size();
+    for (size_t ind = 0; ind < thisSize; ind++) {
         if (Data[ind] != substr[0]) continue;
-        for (size_t subInd = 0; subInd < substr.Size(); subInd++) {
-            if (ind + subInd > this->Size()) return static_cast<size_t>(-1);
+        for (size_t subInd = 0; subInd < subSize; subInd++) {
+            if (ind + subInd > thisSize) return static_cast<size_t>(-1);
             if (Data[ind + subInd] != substr[subInd]) break;
-            else if (subInd == substr.Size() - 1) return ind;
+            else if (subInd == subSize - 1) return ind;
         }
     }
     return static_cast<size_t>(-1);
@@ -177,8 +184,9 @@ size_t String::Find(const char *str) const {
 /// <param name="oldSymbol">Символ, который требуется заменить </param>
 /// <param name="newSymbol">Символ, на который требуется заменить </param>
 void String::Replace(char oldSymbol, char newSymbol) {
-    for (size_t ind = 0; ind < this->Size() + 1; ind++) {
-        if (Data[ind] == oldSymbol)Data[ind] = newSymbol;
+    size_t thisSize = this->Size();
+    for (size_t ind = 0; ind < thisSize + 1; ind++) {
+        if (Data[ind] == oldSymbol) Data[ind] = newSymbol;
     }
 }
 
@@ -248,8 +256,9 @@ void String::RTrim(char symbol) {
 /// <param name="symbol"> Значение символов, которе отрезаем </param>
 void String::LTrim(char symbol) {
     size_t pos = 0;
+    size_t thisSize = this->Size();
     while (Data[pos] == symbol) pos++;
-    for (size_t ind = 0; ind <= this->Size() + 1 - pos; ind++) {
+    for (size_t ind = 0; ind <= thisSize + 1 - pos; ind++) {
         Data[ind] = Data[ind + pos];
     }
 }
@@ -264,7 +273,8 @@ void String::shrink_to_fit() {
     //Data = reinterpret_cast<char *>(realloc(Data, this->Size() + 1));
     capasity = this->Size() + 1;
     auto *temp = new char[capasity];
-    for (size_t ind = 0; ind <= this->Size(); ind++) {
+    size_t thisSize = this->Size();
+    for (size_t ind = 0; ind <= thisSize; ind++) {
         temp[ind] = Data[ind];
     }
     delete[] Data;
