@@ -152,6 +152,7 @@ size_t String::Find(const String &substr) const {
     for (size_t ind = 0; ind < this->Size(); ind++) {
         if (Data[ind] != substr[0]) continue;
         for (size_t subInd = 0; subInd < substr.Size(); subInd++) {
+            if (ind+subInd > this->Size()) return static_cast<size_t>(-1);
             if (Data[ind + subInd] != substr[subInd]) break;
             else if (subInd == substr.Size() - 1) return ind;
         }
