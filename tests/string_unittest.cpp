@@ -42,7 +42,7 @@ TEST(String, GetByIndex) {
 
 TEST(String, Append) {
     String s1("some");
-    s1 += " ";
+    s1 += String(" ");
     s1 += String("string");
 
     String s2 = String("some ") + String("string");

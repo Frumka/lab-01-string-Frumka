@@ -55,7 +55,7 @@ String &String::operator+=(const String &rhs) {
         Data = reinterpret_cast<char *>(realloc(Data, capasity));
     }
     size_t tempSize = this->Size(), rhSize = rhs.Size();
-    for (size_t ind = tempSize + 1, i = 0; ind <= tempSize + \
+    for (size_t ind = tempSize, i = 0; ind <= tempSize + \
     rhSize + 1; ind++, i++) {
         Data[ind] = rhs[i];
     }
@@ -283,7 +283,7 @@ String operator+(const String &a, const String &b) {
         if (ind < aSz) {
             tmp[ind] = a[ind];
         } else {
-            tmp[ind] = b[ind - aSz - 1];
+            tmp[ind] = b[ind - aSz];
         }
     }
     String itog(tmp);
