@@ -80,9 +80,9 @@ String &String::operator+=(const char *rhs) {
     size_t thisSize = this->Size();
     while (rhs[len]) len++;
 
-    if (capasity < thisSize + len + 1) {
+    if (capasity < thisSize + len) {
         //capasity = size_t((capasity + len + 1) * 1.5);
-        capasity = capasity + len + 1; //+1
+        capasity = capasity + len; //+1
         //Data = reinterpret_cast<char *>(realloc(Data, capasity));
         char *tmp = new char[capasity];
         for (size_t i = 0; i < capasity; i++) {
