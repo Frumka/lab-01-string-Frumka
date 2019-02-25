@@ -4,7 +4,7 @@
 #include "../include/string.hpp"
 
 String::~String() {
-    for (size_t i=0;i<capasity;i++) Data[i]=0 ;
+    for (size_t i = 0; i < capasity; i++) Data[i] = 0;
     Data = nullptr;
     free(Data);
     capasity = 0;
