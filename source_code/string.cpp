@@ -4,7 +4,7 @@
 #include "../include/string.hpp"
 
 String::~String() {
-    if(Data == nullptr) return;
+    if (Data == nullptr) return;
     delete[] Data;
 }
 
