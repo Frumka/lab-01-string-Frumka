@@ -20,7 +20,7 @@ String::String(const char *data) {
     size_t ind = 0;
     while (data[ind]) ind++;
     capasity = size_t(ind * 1.5);
-    if (capasity == 0){
+    if (capasity == 0) {
         Data = nullptr;
         return;
     }
@@ -35,7 +35,7 @@ String &String::operator=(const String &rhs) {
         capasity = size_t(rhs.Size() * 1.5);
         Data = new char[capasity];
         int ind = 0;
-        while (rhs[ind] != 0){
+        while (rhs[ind] != 0) {
             Data[ind] = rhs[ind];
             ind++;
         }
@@ -52,8 +52,8 @@ String &String::operator+=(const String &rhs) {
         capasity = size_t((capasity + rhs.Size() + 1) * 1.5);
         //Data = reinterpret_cast<char *>(realloc(Data, capasity));
         auto *temp = new char[capasity];
-        for (size_t ind=0;ind <= this->Size();ind++){
-            temp[ind]=Data[ind];
+        for (size_t ind = 0; ind <= this->Size(); ind++) {
+            temp[ind] = Data[ind];
         }
         delete[] Data;
         Data = temp;
@@ -77,8 +77,8 @@ String &String::operator+=(const char *rhs) {
         capasity = size_t((capasity + len + 1) * 1.5);
         //Data = reinterpret_cast<char *>(realloc(Data, capasity));
         auto *temp = new char[capasity];
-        for (size_t ind=0;ind <= this->Size();ind++){
-            temp[ind]=Data[ind];
+        for (size_t ind = 0; ind <= this->Size(); ind++) {
+            temp[ind] = Data[ind];
         }
         delete[] Data;
         Data = temp;
@@ -96,8 +96,8 @@ String &String::operator*=(unsigned int m) {
         capasity = size_t(this->Size() * m * 1.5 + 1);
         //Data = reinterpret_cast<char *>(realloc(Data, capasity));
         auto *temp = new char[capasity];
-        for (size_t ind=0;ind <= this->Size();ind++){
-            temp[ind]=Data[ind];
+        for (size_t ind = 0; ind <= this->Size(); ind++) {
+            temp[ind] = Data[ind];
         }
         delete[] Data;
         Data = temp;
@@ -119,7 +119,7 @@ bool String::operator==(const String &rhs) const {
         if (Data[ind] == rhs[ind]) {
             ind++;
             continue;
-        }else {
+        } else {
             return false;
         }
     }
@@ -136,7 +136,7 @@ bool String::operator<(const String &rhs) const {
         if (Data[ind] < rhs[ind]) {
             ind++;
             continue;
-        }else{
+        } else {
             return false;
         }
     }
@@ -259,8 +259,8 @@ void String::shrink_to_fit() {
     //Data = reinterpret_cast<char *>(realloc(Data, this->Size() + 1));
     capasity = this->Size() + 1;
     auto *temp = new char[capasity];
-    for (size_t ind=0;ind <= this->Size();ind++){
-        temp[ind]=Data[ind];
+    for (size_t ind = 0; ind <= this->Size(); ind++) {
+        temp[ind] = Data[ind];
     }
     delete[] Data;
     Data = temp;
