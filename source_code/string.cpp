@@ -155,17 +155,15 @@ size_t String::Find(const String &substr) const {
 /// возвратить -1</returns>
 size_t String::Find(const char *str) const {
     size_t subSize = 0;
-    while(str[subSize]) subSize++;
+    while (str[subSize]) subSize++;
     size_t thisSize = this->Size();
-    for(size_t i=0;i<thisSize;i++){
+    for (size_t i = 0; i < thisSize; i++) {
         if (Data[i] != str[0]) continue;
-        for (size_t j=0;j<subSize;j++){
+        for (size_t j = 0; j < subSize; j++) {
             if (i + j > thisSize) return static_cast<size_t>(-1);
             if (Data[i + j] != str[j]) break;
             else if (j == subSize - 1) return i;
         }
-
-
     }
 
     return static_cast<size_t>(-1);
