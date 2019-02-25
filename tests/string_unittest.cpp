@@ -40,7 +40,7 @@ TEST(String, GetByIndex) {
     EXPECT_EQ('S', s[5]);
 }
 
-/*TEST(String, Append) {
+TEST(String, Append) {
     String s1("some");
     s1 += (" ");
     s1 += String("string");
@@ -48,7 +48,7 @@ TEST(String, GetByIndex) {
     String s2 = String("some ") + String("string");
 
     EXPECT_EQ(s1, s2);
-}*/
+}
 
 TEST(String, Replace) {
     String s1("some string");

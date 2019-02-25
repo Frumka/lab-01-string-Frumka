@@ -325,9 +325,17 @@ void String::LTrim(char symbol) {
 }
 
 void String::swap(String &oth) {
-    String temp = *this;
-    *this = oth;
-    oth = temp;
+    if (this != &oth) {
+            size_t fSize = Size() + 1;
+            char* tmp = new char[fSize];
+            for (size_t ind = 0; ind < fSize; ind++) {
+                tmp[ind] = Data[ind];
+            }
+            delete[] Data;
+            Data = oth.Data;
+            oth.Data = tmp;
+            tmp = nullptr;
+    }
 }
 
 void String::shrink_to_fit() {
