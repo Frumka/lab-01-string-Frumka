@@ -30,10 +30,12 @@ String &String::operator=(const String &rhs) {
     if (this != &rhs) {
         capasity = size_t(rhs.Size() * 1.5);
         Data = new char[capasity];
-        size_t ind = 0;
-        do
+        int ind = 0;
+        while (rhs[ind] != 0){
             Data[ind] = rhs[ind];
-        while (rhs[ind++] != 0);  //
+            ind++;
+        }
+        Data[ind] = 0;
     }
     return (*this);
 }
@@ -96,7 +98,8 @@ bool String::operator==(const String &rhs) const {
             ind++;
             continue;
         }
-        else return false;
+        else
+            return false;
     }
     return true;
 }
@@ -112,7 +115,8 @@ bool String::operator<(const String &rhs) const {
             ind++;
             continue;
         }
-        else return false;
+        else
+            return false;
     }
     return true;
 }
