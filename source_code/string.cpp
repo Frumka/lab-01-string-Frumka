@@ -3,13 +3,8 @@
 
 #include "../include/string.hpp"
 
-
-void *reallocate(void *ptr, size_t newsize) {
-    return (realloc(ptr, newsize));
-}
-
 String::~String() {
-    delete[]Data;
+    free(Data);
     capasity = 0;
 }
 
@@ -23,34 +18,24 @@ String::String(const String &rhs) {
 }
 
 String::String(const char *data) {
-/*    size_t ind = 0;
+    size_t ind = 0;
     while (data[ind]) ind++;
     capasity = size_t((ind) * 1.5);
     if (capasity == 0) {
         Data = nullptr;
         return;
     }
-    Data = new char[capasity];
+    Data = nullptr;
+    Data = reinterpret_cast<char *>(calloc(capasity, sizeof(char)));
     for (size_t i = 0; i <= ind; i++) {
         Data[i] = data[i];
-    }*/
-    if (data[0] == 0) {
-        Data = nullptr;
-        capasity = 0;
-    }
-    int i;
-    for (i = 0; data[i] != '\0'; i++) {
-    }
-    Data = new char[i + 1];
-    for (int a = 0; a <= i; a++) {
-        Data[a] = data[a];
     }
 }
 
 String &String::operator=(const String &rhs) {
     if (this != &rhs) {
         capasity = size_t((rhs.Size()) * 1.5);
-        Data = new char[capasity];
+        Data = reinterpret_cast<char *>(calloc(capasity, sizeof(char)));
         int ind = 0;
         while (rhs[ind] != 0) {
             Data[ind] = rhs[ind];
@@ -67,15 +52,7 @@ String &String::operator=(const String &rhs) {
 String &String::operator+=(const String &rhs) {
     if (capasity < this->Size() + rhs.Size() + 1) {
         capasity = size_t((capasity + rhs.Size() + 1) * 1.5);
-        //Data = reinterpret_cast<char *>(realloc(Data, capasity));
-        auto *temp = new char[capasity];
-        size_t tempSize = this->Size();
-        for (size_t ind = 0; ind <= tempSize; ind++) {
-            temp[ind] = Data[ind];
-        }
-        delete[] Data;
-        Data = temp;
-        temp = nullptr;
+        Data = reinterpret_cast<char *>(realloc(Data, capasity));
     }
     size_t tempSize = this->Size(), rhSize = rhs.Size();
     for (size_t ind = tempSize + 1, i = 0; ind <= tempSize + \
@@ -96,14 +73,7 @@ String &String::operator+=(const char *rhs) {
 
     if (capasity < thisSize + len + 1) {
         capasity = size_t((capasity + len + 1) * 1.5);
-        //Data = reinterpret_cast<char *>(realloc(Data, capasity));
-        auto *temp = new char[capasity];
-        for (size_t ind = 0; ind <= thisSize; ind++) {
-            temp[ind] = Data[ind];
-        }
-        delete[] Data;
-        Data = temp;
-        temp = nullptr;
+        Data = reinterpret_cast<char *>(realloc(Data, capasity));
     }
     thisSize = this->Size();
     for (size_t ind = thisSize, i = 0; i <= len; ind++) {
@@ -117,15 +87,7 @@ String &String::operator+=(const char *rhs) {
 String &String::operator*=(unsigned int m) {
     if (capasity < this->Size() * m + 1) {
         capasity = size_t(this->Size() * m * 1.5 + 1);
-        //Data = reinterpret_cast<char *>(realloc(Data, capasity));
-        auto *temp = new char[capasity];
-        size_t thisSize = this->Size();
-        for (size_t ind = 0; ind <= thisSize; ind++) {
-            temp[ind] = Data[ind];
-        }
-        delete[] Data;
-        Data = temp;
-        temp = nullptr;
+        Data = reinterpret_cast<char *>(realloc(Data, capasity));
     }
     size_t startSize = this->Size();
     for (size_t ind = this->Size(); ind < startSize * m; ind++) {
@@ -217,7 +179,7 @@ size_t String::Size() const {
 
 /// Функция для определения пуста ли строка
 bool String::Empty() const {
-    return (Data == nullptr || *this == String(""));
+    return Data == nullptr;
 }
 
 /// Оператор []
@@ -286,16 +248,8 @@ void String::swap(String &oth) {
 }
 
 void String::shrink_to_fit() {
-    //Data = reinterpret_cast<char *>(realloc(Data, this->Size() + 1));
-    capasity = this->Size() + 1;
-    auto *temp = new char[capasity];
-    size_t thisSize = this->Size();
-    for (size_t ind = 0; ind <= thisSize; ind++) {
-        temp[ind] = Data[ind];
-    }
-    delete[] Data;
-    Data = temp;
-    temp = nullptr;
+    capasity = this->Size();
+    Data = reinterpret_cast<char *>(realloc(Data, capasity));
 }
 
 ///outer-class functions
