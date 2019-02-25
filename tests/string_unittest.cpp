@@ -7,10 +7,10 @@
 
 TEST(String, ConstructAssign) {
   const char* data = "some string";
-
   String s0(data);
   s0[0] = 'S';
   String s1(s0);
+  std::cout<<2;
   s1[5] = 'S';
 
   String s2;
@@ -28,9 +28,9 @@ TEST(String, GetByIndex) {
 
   const String s1(data);
 
-  EXPECT_EQ('s', s[0]);
-  EXPECT_EQ('m', s[2]);
-  EXPECT_EQ('s', s[5]);
+  EXPECT_EQ('s', s1[0]);
+  EXPECT_EQ('m', s1[2]);
+  EXPECT_EQ('s', s1[5]);
 
   String s(data);
   s[2] = 'M';
@@ -70,7 +70,8 @@ TEST(String, Size) {
 
 TEST(String, Mult) {
   String s1("ABC");
-  s1 *= 2;
+  //s1 *= 2;        поломанный тест
+  s1 *=3;
 
   EXPECT_EQ(s1, String("ABCABCABC"));
 
@@ -106,10 +107,10 @@ TEST(String, Stream) {
   String s1("some string");
   stream << s1 << " and " << String("stream");
 
-  EXPECT_EQ("some string and stream", ss.str());
+  EXPECT_EQ("some string and stream", stream.str());
 }
 
-TEST(String, ConstructAssign) {
+TEST(String, ConstructAssign1) {  //было ConstructAssign стало ConstructAssign1 - redefinition с 8 строкой
   String s0("some string");
   String s1("other string");
   

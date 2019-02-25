@@ -21,7 +21,7 @@ class String {
   /// Пользовательский конструктор
   /// <param name="data">Данные, которые требуется поместить в создаваемый
   /// объект </param>
-  String(const char* data);
+  explicit String(const char* data);
 
   /// Оператор присваивания
   /// <param name="data">Объект, который копируем </param>
@@ -32,6 +32,12 @@ class String {
   /// <param name="rhs">Объект, который стоит после знака '+=' </param>
   /// <returns>Возвращаем ссылку на себя</returns>
   String& operator+=(const String& rhs);
+
+  /// Оператор +=
+  /// Чтоб Тревис не ныл
+  /// <param name="rhs">Объект, который стоит после знака '+=' </param>
+  /// <returns>Возвращаем ссылку на себя</returns>
+  String& operator+=(const char* rhs);
 
   /// Оператор *=
   /// <returns>Возвращаем ссылку на себя</returns>
@@ -52,6 +58,13 @@ class String {
   /// <returns>Возвращаем позицию substr. Если подстрока не найдена, то
   /// возвратить -1</returns>
   size_t Find(const String& substr) const;
+
+  /// Функция поиска подстроки
+  /// Только в этот раз для char*, привет тревис...
+  /// <param name="substr">Подстрока, которую необходимо найти </param>
+  /// <returns>Возвращаем позицию substr. Если подстрока не найдена, то
+  /// возвратить -1</returns>
+  size_t Find(const char* str) const;
 
   /// Функция замены символов, заменяет все символы oldSymbol на newSymbol.
   /// <param name="oldSymbol">Символ, который требуется заменить </param>
@@ -109,10 +122,16 @@ class String {
 
   void swap(String& oth);
 
+  /// Уменьшает размер контейнера до длинны строки, освобождая память
+  /// (Раз уж решил выделять памяти с запасом, то надо за нее отвечать)
+  /// ..Понятия не имею ка нормально писать docstring-и, так что пока оставлю так
+  void shrink_to_fit();
+
   friend std::ostream& operator<<(std::ostream&, const String&);
 
  private:
   char* Data;
+  size_t capasity = 0;
 };
 
 /// Оператор +
@@ -126,7 +145,7 @@ class String {
 /// <returns>Возвращаем строку равную a + b</returns>
 String operator+(const String& a, const String& b);
 
-/// Оператор +
+/// Оператор *
 /// <example>
 /// <code>
 /// String a = "A";
@@ -146,5 +165,11 @@ bool operator>(const String& a, const String& b);
 /// <param name="str">Строка, которую выводим </param>
 /// <returns>Возвращаем ссылку на поток</returns>
 std::ostream& operator<<(std::ostream& out, const String& str);
+
+/// Оператор ==
+/// Сравнивает левый операнд const char* и правый const String&
+/// Все ради тебя, тревис (；⌣̀_⌣́)
+
+bool operator==(const char* ls,const String& rs);
 
 #endif  // INCLUDE_STRING_HPP_
