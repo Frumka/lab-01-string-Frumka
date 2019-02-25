@@ -140,7 +140,7 @@ String &String::operator+=(const char *rhs) {
 /// Оператор *=
 /// <returns>Возвращаем ссылку на себя</returns>
 String &String::operator*=(unsigned int m) {
-    if (capasity < this->Size() * m + 1) {
+/*    if (capasity < this->Size() * m + 1) {
         //capasity = size_t(this->Size() * m * 1.5 + 1);
         capasity = this->Size() * m + 1;
         //Data = reinterpret_cast<char *>(realloc(Data, capasity));
@@ -157,6 +157,20 @@ String &String::operator*=(unsigned int m) {
         Data[ind] = Data[ind % startSize];
     }
     //Data[startSize * m] = 0;
+    return (*this);*/
+    capasity = Size()*m +1;
+    char *tmp = new char[capasity];
+    for (size_t i = 0;i<capasity;i++){
+        tmp[i] = Data[i];
+    }
+    delete[] Data;
+    Data = tmp;
+    tmp = nullptr;
+    size_t len = Size();
+    for(size_t i=Size();i<len*m;i++){
+        Data[i] = Data[i%len];
+    }
+    Data[len*m] = 0;
     return (*this);
 }
 
