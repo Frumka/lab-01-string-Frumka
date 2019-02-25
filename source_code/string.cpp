@@ -4,20 +4,20 @@
 #include "../include/string.hpp"
 #include <stdexcept>
 
-String::~String(){
+String::~String() {
     delete[]Data;
     capasity = 0;
 }
 
-String::String(){
+String::String() {
     Data = nullptr;
 }
 
-String::String(const String& rhs){
+String::String(const String &rhs) {
     *this = rhs;
 }
 
-String::String(const char* data) {
+String::String(const char *data) {
     size_t ind = 0;
     while (data[ind]) ind++;
     capasity = size_t(ind * 1.5);
@@ -27,9 +27,9 @@ String::String(const char* data) {
     }
 }
 
-String& String::operator=(const String& rhs){
-    if (this != &rhs){
-        capasity = size_t(rhs.Size()*1.5);
+String &String::operator=(const String &rhs) {
+    if (this != &rhs) {
+        capasity = size_t(rhs.Size() * 1.5);
         Data = new char[capasity];
         size_t ind = 0;
         do
@@ -42,13 +42,13 @@ String& String::operator=(const String& rhs){
 /// Оператор +=
 /// <param name="rhs">Объект, который стоит после знака '+=' </param>
 /// <returns>Возвращаем ссылку на себя</returns>
-String& String::operator+=(const String& rhs){
-    if (capasity < this->Size()+rhs.Size()+1){
-        capasity = size_t((capasity+rhs.Size()+1)*1.5);
-        Data = (char*)realloc(Data,capasity);
+String &String::operator+=(const String &rhs) {
+    if (capasity < this->Size() + rhs.Size() + 1) {
+        capasity = size_t((capasity + rhs.Size() + 1) * 1.5);
+        Data = (char *) realloc(Data, capasity);
     }
-    for (size_t ind = this->Size()+1, i=0 ; ind<=this->Size()+rhs.Size()+1 ; ind++, i++){
-        Data[ind] =  rhs[i];
+    for (size_t ind = this->Size() + 1, i = 0; ind <= this->Size() + rhs.Size() + 1; ind++, i++) {
+        Data[ind] = rhs[i];
     }
     return (*this);
 }
@@ -57,46 +57,45 @@ String& String::operator+=(const String& rhs){
 /// Чтоб Тревис не ныл
 /// <param name="rhs">Объект, который стоит после знака '+=' </param>
 /// <returns>Возвращаем ссылку на себя</returns>
-String& String::operator+=(const char* rhs){
-    size_t len=0;
+String &String::operator+=(const char *rhs) {
+    size_t len = 0;
     while (rhs[len]) len++;
 
-    if (capasity < this->Size()+len+1){
-        capasity = size_t((capasity+len+1)*1.5);
-        Data = (char*)realloc(Data,capasity);
+    if (capasity < this->Size() + len + 1) {
+        capasity = size_t((capasity + len + 1) * 1.5);
+        Data = (char *) realloc(Data, capasity);
     }
-    for (size_t ind = this->Size(), i=0 ; i<=len+1 ; ind++){
-        Data[ind] =  rhs[i++];
+    for (size_t ind = this->Size(), i = 0; i <= len + 1; ind++) {
+        Data[ind] = rhs[i++];
     }
     return (*this);
 }
 
 /// Оператор *=
 /// <returns>Возвращаем ссылку на себя</returns>
-String& String::operator*=(unsigned int m){
-    if (capasity < this->Size()*m + 1){
-        capasity = size_t(this->Size()*m*1.5 +1);
-        Data = (char*)realloc(Data,capasity);
+String &String::operator*=(unsigned int m) {
+    if (capasity < this->Size() * m + 1) {
+        capasity = size_t(this->Size() * m * 1.5 + 1);
+        Data = (char *) realloc(Data, capasity);
     }
     size_t startSize = this->Size();
-    for(size_t ind = this->Size();ind<startSize*m;ind++){
-        Data[ind]=Data[ind % startSize];
+    for (size_t ind = this->Size(); ind < startSize * m; ind++) {
+        Data[ind] = Data[ind % startSize];
     }
-    Data[ startSize * m] = 0;
+    Data[startSize * m] = 0;
     return (*this);
 }
 
 /// Оператор ==
 /// <param name="rhs">Объект, который стоит после знака '==' </param>
 /// <returns>Возвращаем значения равенства двух строк</returns>
-bool String::operator==(const String& rhs) const{
+bool String::operator==(const String &rhs) const {
     size_t ind = 0;
-    while (Data[ind] || rhs[ind]){
-        if (Data[ind] == rhs[ind]){
+    while (Data[ind] || rhs[ind]) {
+        if (Data[ind] == rhs[ind]) {
             ind++;
             continue;
-        }
-        else return false;
+        } else return false;
     }
     return true;
 }
@@ -105,14 +104,13 @@ bool String::operator==(const String& rhs) const{
 /// Оператор &lt;
 /// <param name="rhs">Объект, который стоит после знака "&lt;" </param>
 /// <returns>Возвращаем значения сравнения двух строк</returns>
-bool String::operator<(const String& rhs) const{
+bool String::operator<(const String &rhs) const {
     size_t ind = 0;
-    while (Data[ind]||rhs[ind]){
-        if (Data[ind]<rhs[ind]){
+    while (Data[ind] || rhs[ind]) {
+        if (Data[ind] < rhs[ind]) {
             ind++;
             continue;
-        }
-        else return false;
+        } else return false;
     }
     return true;
 }
@@ -121,12 +119,12 @@ bool String::operator<(const String& rhs) const{
 /// <param name="substr">Подстрока, которую необходимо найти </param>
 /// <returns>Возвращаем позицию substr. Если подстрока не найдена, то
 /// возвратить -1</returns>
-size_t String::Find(const String& substr) const{
-    for(size_t ind=0;ind<this->Size();ind++){
-        if (Data[ind]!=substr[0]) continue;
-        for (size_t subInd=0;subInd<substr.Size();subInd++){
-            if (Data[ind+subInd] != substr[subInd]) break;
-            else if (subInd == substr.Size()-1) return ind;
+size_t String::Find(const String &substr) const {
+    for (size_t ind = 0; ind < this->Size(); ind++) {
+        if (Data[ind] != substr[0]) continue;
+        for (size_t subInd = 0; subInd < substr.Size(); subInd++) {
+            if (Data[ind + subInd] != substr[subInd]) break;
+            else if (subInd == substr.Size() - 1) return ind;
         }
     }
     return static_cast<size_t>(-1); //просто подогнал под тесты, ибо с return -1 вылетает некрасивый warning
@@ -138,7 +136,7 @@ size_t String::Find(const String& substr) const{
 /// <param name="substr">Подстрока, которую необходимо найти </param>
 /// <returns>Возвращаем позицию substr. Если подстрока не найдена, то
 /// возвратить -1</returns>
-size_t String::Find(const char* str) const{
+size_t String::Find(const char *str) const {
     String temp(str);
     return this->Find(temp);
 }
@@ -146,24 +144,24 @@ size_t String::Find(const char* str) const{
 /// Функция замены символов, заменяет все символы oldSymbol на newSymbol.
 /// <param name="oldSymbol">Символ, который требуется заменить </param>
 /// <param name="newSymbol">Символ, на который требуется заменить </param>
-void String::Replace(char oldSymbol, char newSymbol){
+void String::Replace(char oldSymbol, char newSymbol) {
 //    if (oldSymbol == 0 && newSymbol != 0) throw std::invalid_argument("");
-    for (size_t ind = 0;ind<this->Size()+1;ind++){
+    for (size_t ind = 0; ind < this->Size() + 1; ind++) {
         if (Data[ind] == oldSymbol)Data[ind] = newSymbol;
     }
 }
 
 /// Функция возвращает длину строки
 /// <returns>Возвращаем длину строки</returns>
-size_t String::Size() const{
-    size_t ind=0;
+size_t String::Size() const {
+    size_t ind = 0;
     while (Data[ind]) ind++;
     return ind;
 } /// returns number of characters in container before (excluding) null-terminator
 
 
 /// Функция для определения пуста ли строка
-bool String::Empty() const{
+bool String::Empty() const {
     return Data == nullptr;
 }
 
@@ -176,7 +174,7 @@ bool String::Empty() const{
 /// </example>
 /// <param name="index"> Индекс символа </param>
 /// <returns> Значение символа в строке с индексом index</returns>
-char String::operator[](size_t index) const{
+char String::operator[](size_t index) const {
     return Data[index];
 }
 
@@ -189,7 +187,7 @@ char String::operator[](size_t index) const{
 /// </example>
 /// <param name="index"> Индекс символа </param>
 /// <returns> Ссылка на символ в строке с индексом index</returns>
-char& String::operator[](size_t index){
+char &String::operator[](size_t index) {
     return Data[index];
 }
 
@@ -201,12 +199,12 @@ char& String::operator[](size_t index){
 /// </code>
 /// </example>
 /// <param name="symbol"> Значение символов, которе отрезаем </param>
-void String::RTrim(char symbol){
-    size_t ind = this->Size()-1;
+void String::RTrim(char symbol) {
+    size_t ind = this->Size() - 1;
     do {
         if (Data[ind] != symbol) return;
         Data[ind] = 0;
-    }while (ind-- != 0);
+    } while (ind-- != 0);
 
 }
 
@@ -218,22 +216,22 @@ void String::RTrim(char symbol){
 /// </code>
 /// </example>
 /// <param name="symbol"> Значение символов, которе отрезаем </param>
-void String::LTrim(char symbol){
-    size_t pos=0;
+void String::LTrim(char symbol) {
+    size_t pos = 0;
     while (Data[pos] == symbol) pos++;
-    for (size_t ind=0;ind<=this->Size()+1 - pos;ind++){
-        Data[ind] = Data[ind+pos];
+    for (size_t ind = 0; ind <= this->Size() + 1 - pos; ind++) {
+        Data[ind] = Data[ind + pos];
     }
 }
 
-void String::swap(String& oth){
+void String::swap(String &oth) {
     String temp = *this;
     *this = oth;
     oth = temp;
 }
 
-void String::shrink_to_fit(){
-    Data = (char*)realloc(Data,this->Size()+1);
+void String::shrink_to_fit() {
+    Data = (char *) realloc(Data, this->Size() + 1);
 }
 
 ///outer-class functions
@@ -248,7 +246,7 @@ void String::shrink_to_fit(){
 /// </code>
 /// </example>
 /// <returns>Возвращаем строку равную a + b</returns>
-String operator+(const String& a, const String& b){
+String operator+(const String &a, const String &b) {
     String temp(a);
     temp += b;
     return temp;
@@ -261,28 +259,28 @@ String operator+(const String& a, const String& b){
 /// String c = a * 5; // c равна "AAAAA"
 /// </code>
 /// </example>
-String operator*(const String& a, unsigned int b){
+String operator*(const String &a, unsigned int b) {
     String temp(a);
-    temp*=b;
+    temp *= b;
     return temp;
 }
 
 /// Оператор !=
-bool operator!=(const String& a, const String& b){
-    return !(a==b);
+bool operator!=(const String &a, const String &b) {
+    return !(a == b);
 }
 
 /// Оператор &gt;
-bool operator>(const String& a, const String& b){
-    return !(a<b || a==b);
+bool operator>(const String &a, const String &b) {
+    return !(a < b || a == b);
 }
 
 /// Оператор вывода
 /// <param name="out">Поток куда выводим строку </param>
 /// <param name="str">Строка, которую выводим </param>
 /// <returns>Возвращаем ссылку на поток</returns>
-std::ostream& operator<<(std::ostream& out, const String& str){
-    for (size_t ind = 0;ind<str.Size();ind++) out << str.Data[ind];
+std::ostream &operator<<(std::ostream &out, const String &str) {
+    for (size_t ind = 0; ind < str.Size(); ind++) out << str.Data[ind];
     return out;
 }
 
@@ -290,7 +288,7 @@ std::ostream& operator<<(std::ostream& out, const String& str){
 /// Сравнивает левый операнд const char* и правый const String&
 /// Все ради тебя, тревис (；⌣̀_⌣́)
 
-bool operator==(const char* ls,const String& rs){
-    String temp (ls);
+bool operator==(const char *ls, const String &rs) {
+    String temp(ls);
     return (temp == rs);
 }
