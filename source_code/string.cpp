@@ -28,6 +28,7 @@ String::String(const char *data) {
     for (size_t i = 0; i <= ind; i++) {
         Data[i] = data[i];
     }
+    this->shrink_to_fit();
 }
 
 String &String::operator=(const String &rhs) {
