@@ -24,8 +24,12 @@ String::String(const char *data) {
         Data = nullptr;
         return;
     }
+    /*Data = new char[capasity];
+    for (size_t i = 0; i <= ind; i++) {
+        Data[i] = data[i];
+    }*/
     Data = new char[capasity];
-    for (size_t i = 0; i < ind; i++) {
+    for(size_t i=0;data[i];i++){
         Data[i] = data[i];
     }
     Data[ind] = 0;
