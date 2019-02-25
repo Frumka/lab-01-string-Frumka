@@ -20,15 +20,18 @@ String::String(const String &rhs) {
 String::String(const char *data) {
     size_t ind = 0;
     while (data[ind]) ind++;
-    capasity = size_t((ind) * 1.5);
-    if (capasity == 0) {
-        Data = nullptr;
-        return;
-    }
+    //capasity = size_t((ind) * 1.5);
+    capasity = ind;
+//    if (capasity == 0) {
+//        Data = nullptr;
+//        return;
+//    }
     Data = nullptr;
-    Data = reinterpret_cast<char *>(calloc(capasity, sizeof(char)));
-    for (size_t i = 0; i <= ind; i++) {
-        Data[i] = data[i];
+    if (capasity != 0) {
+        Data = reinterpret_cast<char *>(calloc(capasity, sizeof(char)));
+        for (size_t i = 0; i <= ind; i++) {
+            Data[i] = data[i];
+        }
     }
 }
 
