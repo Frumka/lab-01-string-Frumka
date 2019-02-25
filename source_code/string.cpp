@@ -23,7 +23,7 @@ String::String(const char *data) {
     size_t ind = 0;
     while (data[ind]) ind++;
     //capasity = size_t((ind) * 1.5);
-    capasity = ind+1;
+    capasity = ind + 1;
     Data = nullptr;
     if (capasity != 0) {
         Data = reinterpret_cast<char *>(calloc(capasity, sizeof(char)));
@@ -36,7 +36,7 @@ String::String(const char *data) {
 String &String::operator=(const String &rhs) {
     if (this != &rhs) {
         //capasity = size_t((rhs.Size()) * 1.5);
-        capasity = rhs.Size()+1;
+        capasity = rhs.Size() + 1;
         Data = reinterpret_cast<char *>(calloc(capasity, sizeof(char)));
         int ind = 0;
         while (rhs[ind] != 0) {
@@ -91,7 +91,7 @@ String &String::operator+=(const char *rhs) {
 String &String::operator*=(unsigned int m) {
     if (capasity < this->Size() * m + 1) {
         //capasity = size_t(this->Size() * m * 1.5 + 1);
-        capasity = this->Size()*m + 1;
+        capasity = this->Size() * m + 1;
         Data = reinterpret_cast<char *>(realloc(Data, capasity));
     }
     size_t startSize = this->Size();
