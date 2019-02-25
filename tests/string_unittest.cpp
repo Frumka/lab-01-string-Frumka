@@ -10,7 +10,6 @@ TEST(String, ConstructAssign) {
   String s0(data);
   s0[0] = 'S';
   String s1(s0);
-  std::cout<<2;
   s1[5] = 'S';
 
   String s2;
@@ -110,10 +109,9 @@ TEST(String, Stream) {
   EXPECT_EQ("some string and stream", stream.str());
 }
 
-TEST(String, ConstructAssign1) {  //было ConstructAssign стало ConstructAssign1 - redefinition с 8 строкой
+TEST(String, ConstructAssign1) {
   String s0("some string");
   String s1("other string");
-  
 
   EXPECT_EQ("some string", s0);
   EXPECT_EQ("other string", s1);

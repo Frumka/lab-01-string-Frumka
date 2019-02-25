@@ -1,8 +1,7 @@
 //
-// Created by atrum on 23.02.19.
+// "Copyright 2019 Semenov Pavel Corporation"  [legal]
 
 #include "../include/string.hpp"
-#include <stdexcept>
 
 String::~String() {
     delete[]Data;
@@ -34,7 +33,7 @@ String &String::operator=(const String &rhs) {
         size_t ind = 0;
         do
             Data[ind] = rhs[ind];
-        while (rhs[ind++] != 0);
+        while (rhs[ind++] != 0);  //
     }
     return (*this);
 }
@@ -45,9 +44,10 @@ String &String::operator=(const String &rhs) {
 String &String::operator+=(const String &rhs) {
     if (capasity < this->Size() + rhs.Size() + 1) {
         capasity = size_t((capasity + rhs.Size() + 1) * 1.5);
-        Data = (char *) realloc(Data, capasity);
+        Data = reinterpret_cast<char *>(realloc(Data, capasity));
     }
-    for (size_t ind = this->Size() + 1, i = 0; ind <= this->Size() + rhs.Size() + 1; ind++, i++) {
+    for (size_t ind = this->Size() + 1, i = 0; ind <= this->Size() + \
+    rhs.Size() + 1; ind++, i++) {
         Data[ind] = rhs[i];
     }
     return (*this);
@@ -63,7 +63,7 @@ String &String::operator+=(const char *rhs) {
 
     if (capasity < this->Size() + len + 1) {
         capasity = size_t((capasity + len + 1) * 1.5);
-        Data = (char *) realloc(Data, capasity);
+        Data = reinterpret_cast<char *>(realloc(Data, capasity));
     }
     for (size_t ind = this->Size(), i = 0; i <= len + 1; ind++) {
         Data[ind] = rhs[i++];
@@ -76,7 +76,7 @@ String &String::operator+=(const char *rhs) {
 String &String::operator*=(unsigned int m) {
     if (capasity < this->Size() * m + 1) {
         capasity = size_t(this->Size() * m * 1.5 + 1);
-        Data = (char *) realloc(Data, capasity);
+        Data = reinterpret_cast<char *>(realloc(Data, capasity));
     }
     size_t startSize = this->Size();
     for (size_t ind = this->Size(); ind < startSize * m; ind++) {
@@ -95,7 +95,8 @@ bool String::operator==(const String &rhs) const {
         if (Data[ind] == rhs[ind]) {
             ind++;
             continue;
-        } else return false;
+        }
+        else return false;
     }
     return true;
 }
@@ -110,7 +111,8 @@ bool String::operator<(const String &rhs) const {
         if (Data[ind] < rhs[ind]) {
             ind++;
             continue;
-        } else return false;
+        }
+        else return false;
     }
     return true;
 }
@@ -127,8 +129,7 @@ size_t String::Find(const String &substr) const {
             else if (subInd == substr.Size() - 1) return ind;
         }
     }
-    return static_cast<size_t>(-1); //просто подогнал под тесты, ибо с return -1 вылетает некрасивый warning
-
+    return static_cast<size_t>(-1);
 }
 
 /// Функция поиска подстроки
@@ -145,7 +146,6 @@ size_t String::Find(const char *str) const {
 /// <param name="oldSymbol">Символ, который требуется заменить </param>
 /// <param name="newSymbol">Символ, на который требуется заменить </param>
 void String::Replace(char oldSymbol, char newSymbol) {
-//    if (oldSymbol == 0 && newSymbol != 0) throw std::invalid_argument("");
     for (size_t ind = 0; ind < this->Size() + 1; ind++) {
         if (Data[ind] == oldSymbol)Data[ind] = newSymbol;
     }
@@ -157,7 +157,7 @@ size_t String::Size() const {
     size_t ind = 0;
     while (Data[ind]) ind++;
     return ind;
-} /// returns number of characters in container before (excluding) null-terminator
+} /// returns number of characters in container before null-terminator
 
 
 /// Функция для определения пуста ли строка
@@ -205,7 +205,6 @@ void String::RTrim(char symbol) {
         if (Data[ind] != symbol) return;
         Data[ind] = 0;
     } while (ind-- != 0);
-
 }
 
 /// Смотри пример
@@ -231,7 +230,7 @@ void String::swap(String &oth) {
 }
 
 void String::shrink_to_fit() {
-    Data = (char *) realloc(Data, this->Size() + 1);
+    Data = reinterpret_cast<char *>(realloc(Data, this->Size() + 1));
 }
 
 ///outer-class functions
