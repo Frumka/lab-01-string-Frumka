@@ -40,7 +40,7 @@ String &String::operator=(const String &rhs) {
     if (this != &rhs) {
         //capasity = size_t((rhs.Size()) * 1.5);
         capasity = rhs.Size() + 1;
-        Data = new char[capasity+1];
+        Data = new char[capasity + 1];
         int ind = 0;
         while (rhs[ind] != 0) {
             Data[ind] = rhs[ind];
@@ -160,9 +160,9 @@ String &String::operator*=(unsigned int m) {
     size_t size = Size();
     char *tmp = new char[capasity];
     for (size_t i = 0; i < capasity; i++) {
-        tmp[i] = Data[i%size];
+        tmp[i] = Data[i % size];
     }
-    tmp[size*m] = 0;
+    tmp[size * m] = 0;
     delete[] Data;
     Data = tmp;
 
