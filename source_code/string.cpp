@@ -52,23 +52,39 @@ String &String::operator=(const String &rhs) {
 /// <param name="rhs">Объект, который стоит после знака '+=' </param>
 /// <returns>Возвращаем ссылку на себя</returns>
 String &String::operator+=(const String &rhs) {
-    if (capasity < this->Size() + rhs.Size() + 1) {
+/*    //    if (capasity < this->Size() + rhs.Size() + 1) {
         //capasity = size_t((capasity + rhs.Size() + 1) * 1.5);
-        capasity = capasity + rhs.Size();
+        capasity = Size() + rhs.Size() + 1;
         char *temp = new char[capasity];
         for (size_t i = 0; i < capasity; i++) {
             temp[i] = Data[i];
-        }
+//        }
         delete[] Data;
         Data = temp;
         temp = nullptr;
     }
     size_t tempSize = this->Size(), rhSize = rhs.Size();
     for (size_t ind = tempSize, i = 0; ind <= tempSize + \
-    rhSize + 1; ind++, i++) {
+    rhSize + 1; ind++) {
         Data[ind] = rhs[i];
+        i++;
     }
-    return (*this);
+    return (*this);*/
+    size_t thisSize = Size();
+    size_t fSize = rhs.Size() + thisSize + 1;
+    char *tmp = new char[fSize];
+    for (size_t a = 0; a < fSize; a++) {
+        if (a < thisSize) {
+            tmp[a] = Data[a];
+        } else {
+            tmp[a] = rhs.Data[a - thisSize];
+        }
+    }
+    if (!Empty()) delete[] Data;
+    Data = tmp;
+    tmp = nullptr;
+    // delete []temp;
+    return *this;
 }
 
 /// Оператор +=
@@ -80,9 +96,9 @@ String &String::operator+=(const char *rhs) {
     size_t thisSize = this->Size();
     while (rhs[len]) len++;
 
-    if (capasity < thisSize + len) {
+    if (capasity < thisSize + len + 1) {
         //capasity = size_t((capasity + len + 1) * 1.5);
-        capasity = capasity + len; //+1
+        capasity = capasity + len + 1; //+1
         //Data = reinterpret_cast<char *>(realloc(Data, capasity));
         char *tmp = new char[capasity];
         for (size_t i = 0; i < capasity; i++) {
