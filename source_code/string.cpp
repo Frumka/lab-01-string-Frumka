@@ -118,7 +118,7 @@ String &String::operator*=(unsigned int m) {
     for (size_t ind = this->Size(); ind < startSize * m; ind++) {
         Data[ind] = Data[ind % startSize];
     }
-    Data[startSize * m] = 0;
+    //Data[startSize * m] = 0;
     return (*this);
 }
 
