@@ -4,10 +4,8 @@
 #include "../include/string.hpp"
 
 String::~String() {
-    for (size_t i = 0; i < capasity; i++) Data[i] = 0;
-    Data = nullptr;
+    if(Data == nullptr) return;
     delete[] Data;
-    capasity = 0;
 }
 
 String::String() {
@@ -32,7 +30,7 @@ String::String(const char *data) {
           }*/
     size_t ind;
     for (ind = 0; data[ind] != 0; ind++) continue;
-    Data = new char[ind + 1];
+    Data = new char[ind + 2];
     for (size_t i = 0; i <= ind; i++) {
         Data[i] = data[i];
     }
