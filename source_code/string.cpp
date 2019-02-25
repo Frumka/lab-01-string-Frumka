@@ -25,7 +25,7 @@ String::String(const char *data) {
         return;
     }
     Data = new char[capasity];
-    for (size_t i = 0; i < ind + 2; i++) {
+    for (size_t i = 0; i < ind + 1; i++) {
         Data[i] = data[i];
     }
 }
