@@ -71,7 +71,7 @@ String &String::operator+=(const char *rhs) {
         capasity = size_t((capasity + len + 1) * 1.5);
         Data = reinterpret_cast<char *>(realloc(Data, capasity));
     }
-    for (size_t ind = this->Size(), i = 0; i <= len + 1; ind++) {
+    for (size_t ind = this->Size(), i = 0; i <= len; ind++) {
         Data[ind] = rhs[i++];
     }
     return (*this);
