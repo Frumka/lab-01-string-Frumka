@@ -30,7 +30,7 @@ String::String(const char *data) {
           }*/
     size_t ind;
     for (ind = 0; data[ind] != 0; ind++) continue;
-    Data = new char[ind + 2];
+    Data = new char[ind];
     for (size_t i = 0; i <= ind; i++) {
         Data[i] = data[i];
     }
