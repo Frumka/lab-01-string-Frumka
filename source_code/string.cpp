@@ -14,23 +14,13 @@ String::String() {
 
 String::String(const String &rhs) {
     Data = nullptr;
-    *this = rhs;   //0x602000000451
+    *this = rhs;
 }
 
 String::String(const char *data) {
-    /*  size_t ind = 0;
-      while (data[ind]) ind++;
-      //capasity = size_t((ind) * 1.5);
-      capasity = ind + 1;
-      Data = nullptr;
-      if (capasity != 0) {
-          Data = new char[capasity];
-          for (size_t i = 0; i <= ind; i++) {
-              Data[i] = data[i];
-          }*/
     size_t ind;
     for (ind = 0; data[ind] != 0; ind++) continue;
-    Data = new char[ind + 1];
+    Data = new char[size_t((ind + 1) * 1.5)];
     for (size_t i = 0; i <= ind; i++) {
         Data[i] = data[i];
     }
@@ -38,10 +28,9 @@ String::String(const char *data) {
 
 String &String::operator=(const String &rhs) {
     if (this != &rhs) {
-        //capasity = size_t((rhs.Size()) * 1.5);
-        capasity = rhs.Size() + 1;
-        Data = new char[capasity + 1];
-        int ind = 0;
+        capasity = size_t((rhs.Size()) + 1 * 1.5);
+        Data = new char[capasity];
+        size_t ind = 0;
         while (rhs[ind] != 0) {
             Data[ind] = rhs[ind];
             ind++;
@@ -55,38 +44,26 @@ String &String::operator=(const String &rhs) {
 /// <param name="rhs">Объект, который стоит после знака '+=' </param>
 /// <returns>Возвращаем ссылку на себя</returns>
 String &String::operator+=(const String &rhs) {
-/*    //    if (capasity < this->Size() + rhs.Size() + 1) {
-        //capasity = size_t((capasity + rhs.Size() + 1) * 1.5);
-        capasity = Size() + rhs.Size() + 1;
-        char *temp = new char[capasity];
-        for (size_t i = 0; i < capasity; i++) {
-            temp[i] = Data[i];
-//        }
-        delete[] Data;
-        Data = temp;
-        temp = nullptr;
-    }
-    size_t tempSize = this->Size(), rhSize = rhs.Size();
-    for (size_t ind = tempSize, i = 0; ind <= tempSize + \
-    rhSize + 1; ind++) {
-        Data[ind] = rhs[i];
-        i++;
-    }
-    return (*this);*/
     size_t thisSize = Size();
     size_t fSize = rhs.Size() + thisSize + 1;
-    char *tmp = new char[fSize];
-    for (size_t a = 0; a < fSize; a++) {
-        if (a < thisSize) {
-            tmp[a] = Data[a];
+    char *tmp;
+    if (fSize < capasity)
+        tmp = new char[capasity];
+    else {
+        capasity = size_t(fSize * 1.5);
+        tmp = new char[capasity];
+    }
+    for (size_t ind = 0; ind < fSize; ind++) {
+        if (ind < thisSize) {
+            tmp[ind] = Data[ind];
         } else {
-            tmp[a] = rhs.Data[a - thisSize];
+            tmp[ind] = rhs.Data[ind - thisSize];
         }
     }
-    if (!Empty()) delete[] Data;
+    delete[] Data;
     Data = tmp;
     tmp = nullptr;
-    // delete []temp;
+    // delete[] temp;
     return *this;
 }
 
@@ -95,43 +72,25 @@ String &String::operator+=(const String &rhs) {
 /// <param name="rhs">Объект, который стоит после знака '+=' </param>
 /// <returns>Возвращаем ссылку на себя</returns>
 String &String::operator+=(const char *rhs) {
-    /* size_t len = 0;
-     size_t thisSize = this->Size();
-     while (rhs[len]) len++;
-
-     if (capasity < thisSize + len + 1) {
-         //capasity = size_t((capasity + len + 1) * 1.5);
-         capasity = capasity + len + 1; //+1
-         //Data = reinterpret_cast<char *>(realloc(Data, capasity));
-         char *tmp = new char[capasity];
-         for (size_t i = 0; i < capasity; i++) {
-             tmp[i] = Data[i];
+    /* size_t thisSize = Size();
+     size_t ind;
+     for (ind = 0; rhs[ind] != 0; ind++) {
+     }
+     size_t fSize = thisSize + ind + 1;
+     char *temp = new char[fSize];
+     for (size_t ind2 = 0; ind2 < fSize; ind2++) {
+         if (ind2 < thisSize) {
+             temp[ind2] = Data[ind2];
+         } else {
+             temp[ind2] = rhs[ind2 - thisSize];
          }
-         delete[] Data;
-         Data = tmp;
-         tmp = nullptr;
      }
-     thisSize = this->Size();
-     for (size_t ind = thisSize, i = 0; i <= len; ind++) {
-         Data[ind] = rhs[i++];
-     }
-     return (*this);*/
-    size_t thisSize = Size();
-    size_t ind;
-    for (ind = 0; rhs[ind] != 0; ind++) {
-    }
-    size_t fSize = thisSize + ind + 1;
-    char *temp = new char[fSize];
-    for (size_t ind2 = 0; ind2 < fSize; ind2++) {
-        if (ind2 < thisSize) {
-            temp[ind2] = Data[ind2];
-        } else {
-            temp[ind2] = rhs[ind2 - thisSize];
-        }
-    }
-    if (!Empty()) delete[] Data;
-    Data = temp;
-    temp = nullptr;
+     if (!Empty()) delete[] Data;
+     Data = temp;
+     temp = nullptr;
+     return *this;*/
+    String tmp(rhs);
+    *this += tmp;
     return *this;
 }
 
@@ -207,7 +166,7 @@ bool String::operator<(const String &rhs) const {
 /// <returns>Возвращаем позицию substr. Если подстрока не найдена, то
 /// возвратить -1</returns>
 size_t String::Find(const String &substr) const {
-    size_t thisSize = this->Size();
+    size_t thisSize = Size();
     size_t subSize = substr.Size();
     for (size_t ind = 0; ind < thisSize; ind++) {
         if (Data[ind] != substr[0]) continue;
@@ -226,7 +185,7 @@ size_t String::Find(const String &substr) const {
 /// <returns>Возвращаем позицию substr. Если подстрока не найдена, то
 /// возвратить -1</returns>
 size_t String::Find(const char *str) const {
-    size_t subSize = 0;
+    /*size_t subSize = 0;
     while (str[subSize]) subSize++;
     size_t thisSize = this->Size();
     for (size_t i = 0; i < thisSize; i++) {
@@ -238,14 +197,16 @@ size_t String::Find(const char *str) const {
         }
     }
 
-    return static_cast<size_t>(-1);
+    return static_cast<size_t>(-1);*/
+    String tmp(str);
+    return Find(tmp);
 }
 
 /// Функция замены символов, заменяет все символы oldSymbol на newSymbol.
 /// <param name="oldSymbol">Символ, который требуется заменить </param>
 /// <param name="newSymbol">Символ, на который требуется заменить </param>
 void String::Replace(char oldSymbol, char newSymbol) {
-    size_t thisSize = this->Size();
+    size_t thisSize = Size();
     for (size_t ind = 0; ind < thisSize + 1; ind++) {
         if (Data[ind] == oldSymbol) Data[ind] = newSymbol;
     }
@@ -300,7 +261,7 @@ char &String::operator[](size_t index) {
 /// </example>
 /// <param name="symbol"> Значение символов, которе отрезаем </param>
 void String::RTrim(char symbol) {
-    size_t ind = this->Size() - 1;
+    size_t ind = Size() - 1;
     do {
         if (Data[ind] != symbol) return;
         Data[ind] = 0;
@@ -317,7 +278,7 @@ void String::RTrim(char symbol) {
 /// <param name="symbol"> Значение символов, которе отрезаем </param>
 void String::LTrim(char symbol) {
     size_t pos = 0;
-    size_t thisSize = this->Size();
+    size_t thisSize = Size();
     while (Data[pos] == symbol) pos++;
     for (size_t ind = 0; ind <= thisSize + 1 - pos; ind++) {
         Data[ind] = Data[ind + pos];
@@ -334,13 +295,12 @@ void String::swap(String &oth) {
         delete[] Data;
         Data = oth.Data;
         oth.Data = tmp;
-        tmp = nullptr;
+        //    tmp = nullptr;
     }
 }
 
 void String::shrink_to_fit() {
-    capasity = this->Size() + 1;
-    //Data = reinterpret_cast<char *>(realloc(Data, capasity));
+    capasity = Size() + 1;
     char *tmp = new char[capasity];
     for (size_t i = 0; i < capasity; i++) {
         tmp[i] = Data[i];
@@ -363,7 +323,7 @@ void String::shrink_to_fit() {
 /// </example>
 /// <returns>Возвращаем строку равную a + b</returns>
 String operator+(const String &a, const String &b) {
-    size_t aSz = a.Size(), bSz = b.Size();
+    /*size_t aSz = a.Size(), bSz = b.Size();
     size_t full = aSz + bSz + 1;
     //char *tmp = static_cast<char *>(calloc(full, sizeof(char)));
     char *tmp = new char[full];
@@ -376,7 +336,10 @@ String operator+(const String &a, const String &b) {
     }
     String itog(tmp);
     delete[]tmp;
-    return itog;
+    return itog;*/
+    String tmp(a);
+    tmp += b;
+    return tmp;
 }
 
 /// Оператор *
@@ -387,18 +350,21 @@ String operator+(const String &a, const String &b) {
 /// </code>
 /// </example>
 String operator*(const String &a, unsigned int b) {
-    size_t thisSize = a.Size();
-    //char *tmp = static_cast<char *>(calloc(thisSize * b + 1, sizeof(char)));
-    char *tmp = new char[thisSize * b + 1];
-    for (size_t i = 0; i < b; i++) {
-        for (size_t j = 0; j < thisSize; j++) {
-            tmp[j + i * thisSize] = a[j];
-        }
-    }
-    tmp[thisSize * b] = 0;
-    String tmpNew(tmp);
-    delete[]tmp;
-    return tmpNew;
+    /* size_t thisSize = a.Size();
+     //char *tmp = static_cast<char *>(calloc(thisSize * b + 1, sizeof(char)));
+     char *tmp = new char[thisSize * b + 1];
+     for (size_t i = 0; i < b; i++) {
+         for (size_t j = 0; j < thisSize; j++) {
+             tmp[j + i * thisSize] = a[j];
+         }
+     }
+     tmp[thisSize * b] = 0;
+     String tmpNew(tmp);
+     delete[]tmp;
+     return tmpNew;*/
+    String tmp(a);
+    tmp *= b;
+    return tmp;
 }
 
 /// Оператор !=
