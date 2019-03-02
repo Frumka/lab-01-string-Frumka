@@ -3,20 +3,24 @@
 
 #include "../include/string.hpp"
 
+/// Деструктор
 String::~String() {
     if (Data == nullptr) return;
     delete[] Data;
 }
 
+/// Конструктор по умолчанию
 String::String() {
     Data = nullptr;
 }
 
+/// Конструктор копирования
 String::String(const String &rhs) {
     Data = nullptr;
     *this = rhs;
 }
 
+/// Конструктор из *char
 String::String(const char *data) {
     size_t ind;
     for (ind = 0; data[ind] != 0; ind++) continue;
@@ -27,6 +31,7 @@ String::String(const char *data) {
     }
 }
 
+/// Оператор присваивания
 String &String::operator=(const String &rhs) {
     if (this != &rhs) {
         capasity = size_t((rhs.Size()) + 1 * 1.5);
@@ -64,7 +69,6 @@ String &String::operator+=(const String &rhs) {
     delete[] Data;
     Data = tmp;
     tmp = nullptr;
-    // delete[] temp;
     return *this;
 }
 
@@ -73,23 +77,6 @@ String &String::operator+=(const String &rhs) {
 /// <param name="rhs">Объект, который стоит после знака '+=' </param>
 /// <returns>Возвращаем ссылку на себя</returns>
 String &String::operator+=(const char *rhs) {
-    /* size_t thisSize = Size();
-     size_t ind;
-     for (ind = 0; rhs[ind] != 0; ind++) {
-     }
-     size_t fSize = thisSize + ind + 1;
-     char *temp = new char[fSize];
-     for (size_t ind2 = 0; ind2 < fSize; ind2++) {
-         if (ind2 < thisSize) {
-             temp[ind2] = Data[ind2];
-         } else {
-             temp[ind2] = rhs[ind2 - thisSize];
-         }
-     }
-     if (!Empty()) delete[] Data;
-     Data = temp;
-     temp = nullptr;
-     return *this;*/
     String tmp(rhs);
     *this += tmp;
     return *this;
@@ -98,24 +85,6 @@ String &String::operator+=(const char *rhs) {
 /// Оператор *=
 /// <returns>Возвращаем ссылку на себя</returns>
 String &String::operator*=(unsigned int m) {
-/*    if (capasity < this->Size() * m + 1) {
-        //capasity = size_t(this->Size() * m * 1.5 + 1);
-        capasity = this->Size() * m + 1;
-        //Data = reinterpret_cast<char *>(realloc(Data, capasity));
-        char *tmp = new char[capasity];
-        for (size_t i = 0; i < capasity; i++) {
-            tmp[i] = Data[i];
-        }
-        delete[] Data;
-        Data = tmp;
-        tmp = nullptr;
-    }
-    size_t startSize = this->Size();
-    for (size_t ind = this->Size(); ind < startSize * m; ind++) {
-        Data[ind] = Data[ind % startSize];
-    }
-    //Data[startSize * m] = 0;
-    return (*this);*/
     size_t thisSize = Size();
     size_t fSize = thisSize * m + 1;
     if (capasity < fSize)
@@ -188,19 +157,6 @@ size_t String::Find(const String &substr) const {
 /// <returns>Возвращаем позицию substr. Если подстрока не найдена, то
 /// возвратить -1</returns>
 size_t String::Find(const char *str) const {
-    /*size_t subSize = 0;
-    while (str[subSize]) subSize++;
-    size_t thisSize = this->Size();
-    for (size_t i = 0; i < thisSize; i++) {
-        if (Data[i] != str[0]) continue;
-        for (size_t j = 0; j < subSize; j++) {
-            if (i + j > thisSize) return static_cast<size_t>(-1);
-            if (Data[i + j] != str[j]) break;
-            else if (j == subSize - 1) return i;
-        }
-    }
-
-    return static_cast<size_t>(-1);*/
     String tmp(str);
     return Find(tmp);
 }
@@ -301,9 +257,10 @@ void String::swap(String &oth) {
         capasity = oth.capasity;
         oth.Data = tmp;
         oth.capasity = tmpCapasity;
-        //    tmp = nullptr;
     }
 }
+
+/// Освобождает неиспользуемую память
 
 void String::shrink_to_fit() {
     capasity = Size() + 1;
@@ -329,20 +286,6 @@ void String::shrink_to_fit() {
 /// </example>
 /// <returns>Возвращаем строку равную a + b</returns>
 String operator+(const String &a, const String &b) {
-    /*size_t aSz = a.Size(), bSz = b.Size();
-    size_t full = aSz + bSz + 1;
-    //char *tmp = static_cast<char *>(calloc(full, sizeof(char)));
-    char *tmp = new char[full];
-    for (size_t ind = 0; ind < full; ind++) {
-        if (ind < aSz) {
-            tmp[ind] = a[ind];
-        } else {
-            tmp[ind] = b[ind - aSz];
-        }
-    }
-    String itog(tmp);
-    delete[]tmp;
-    return itog;*/
     String tmp(a);
     tmp += b;
     return tmp;
@@ -356,18 +299,6 @@ String operator+(const String &a, const String &b) {
 /// </code>
 /// </example>
 String operator*(const String &a, unsigned int b) {
-    /* size_t thisSize = a.Size();
-     //char *tmp = static_cast<char *>(calloc(thisSize * b + 1, sizeof(char)));
-     char *tmp = new char[thisSize * b + 1];
-     for (size_t i = 0; i < b; i++) {
-         for (size_t j = 0; j < thisSize; j++) {
-             tmp[j + i * thisSize] = a[j];
-         }
-     }
-     tmp[thisSize * b] = 0;
-     String tmpNew(tmp);
-     delete[]tmp;
-     return tmpNew;*/
     String tmp(a);
     tmp *= b;
     return tmp;
