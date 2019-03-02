@@ -20,7 +20,8 @@ String::String(const String &rhs) {
 String::String(const char *data) {
     size_t ind;
     for (ind = 0; data[ind] != 0; ind++) continue;
-    Data = new char[size_t((ind + 1) * 1.5)];
+    capasity = size_t((ind + 1) * 1.5);
+    Data = new char[capasity];
     for (size_t i = 0; i <= ind; i++) {
         Data[i] = data[i];
     }
@@ -115,13 +116,15 @@ String &String::operator*=(unsigned int m) {
     }
     //Data[startSize * m] = 0;
     return (*this);*/
-    capasity = Size() * m + 1;
-    size_t size = Size();
+    size_t thisSize = Size();
+    size_t fSize = thisSize * m + 1;
+    if (capasity < fSize)
+        capasity = size_t(fSize * 1.5);
     char *tmp = new char[capasity];
-    for (size_t i = 0; i < capasity; i++) {
-        tmp[i] = Data[i % size];
+    for (size_t i = 0; i < fSize; i++) {
+        tmp[i] = Data[i % thisSize];
     }
-    tmp[size * m] = 0;
+    tmp[thisSize * m] = 0;
     delete[] Data;
     Data = tmp;
 
@@ -288,13 +291,16 @@ void String::LTrim(char symbol) {
 void String::swap(String &oth) {
     if (this != &oth) {
         size_t fSize = Size() + 1;
-        char *tmp = new char[fSize];
+        char *tmp = new char[capasity];
         for (size_t ind = 0; ind < fSize; ind++) {
             tmp[ind] = Data[ind];
         }
         delete[] Data;
+        size_t tmpCapasity = capasity;
         Data = oth.Data;
+        capasity = oth.capasity;
         oth.Data = tmp;
+        oth.capasity = tmpCapasity;
         //    tmp = nullptr;
     }
 }
