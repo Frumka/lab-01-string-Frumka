@@ -48,9 +48,9 @@ String &String::operator+=(const String &rhs) {
     size_t thisSize = Size();
     size_t fSize = rhs.Size() + thisSize + 1;
     char *tmp;
-    if (fSize < capasity)
+    if (fSize < capasity) {
         tmp = new char[capasity];
-    else {
+    } else {
         capasity = size_t(fSize * 1.5);
         tmp = new char[capasity];
     }
