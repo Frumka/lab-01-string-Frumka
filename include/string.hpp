@@ -131,7 +131,7 @@ public:
 
 private:
     char *Data = nullptr;
-    size_t capasity = 0;
+    size_t capacity = 0;
 };
 
 /// Оператор +

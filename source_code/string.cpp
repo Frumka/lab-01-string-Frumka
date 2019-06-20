@@ -12,14 +12,14 @@ String::~String() {
 String::String() {
     Data = new char[1];
     Data[0] = 0;
-    capasity = 1;
+    capacity = 1;
 }
 
 /// Конструктор копирования
 String::String(const String &rhs) {
     delete[] Data;
-    capasity = rhs.capasity;
-    Data = new char[capasity];
+    capacity = rhs.capacity;
+    Data = new char[capacity];
     size_t rSize = rhs.Size();
     for (size_t i = 0; i < rSize; i++) {
         Data[i] = rhs.Data[i];
@@ -31,8 +31,8 @@ String::String(const String &rhs) {
 String::String(const char *data) {
     size_t ind;
     for (ind = 0; data[ind] != 0; ind++) continue;
-    capasity = size_t((ind + 1) * 1.5);
-    Data = new char[capasity];
+    capacity = size_t((ind + 1) * 1.5);
+    Data = new char[capacity];
     for (size_t i = 0; i <= ind; i++) {
         Data[i] = data[i];
     }
@@ -42,8 +42,8 @@ String::String(const char *data) {
 String &String::operator=(const String &rhs) {
     delete[] Data;
     if (this != &rhs) {
-        capasity = size_t((rhs.Size() + 1) * 1.5);
-        Data = new char[capasity];
+        capacity = size_t((rhs.Size() + 1) * 1.5);
+        Data = new char[capacity];
         size_t ind = 0;
         while (rhs[ind] != 0) {
             Data[ind] = rhs[ind];
@@ -61,7 +61,7 @@ String &String::operator+=(const String &rhs) {
     size_t thisSize = Size();
     size_t fSize = rhs.Size() + thisSize + 1;
     char *tmp;
-    if (fSize <= capasity) {
+    if (fSize <= capacity) {
         for (size_t i = thisSize; i < fSize; i++)
             Data[i] = rhs.Data[i - thisSize];
 
@@ -69,8 +69,8 @@ String &String::operator+=(const String &rhs) {
         return *this;
 
     } else {
-        capasity = size_t(fSize * 1.5);
-        tmp = new char[capasity];
+        capacity = size_t(fSize * 1.5);
+        tmp = new char[capacity];
     }
     for (size_t ind = 0; ind < fSize; ind++) {
         if (ind < thisSize) {
@@ -100,7 +100,7 @@ String &String::operator*=(unsigned int m) {
     size_t thisSize = Size();
     size_t fSize = thisSize * m + 1;
 
-    if (capasity >= fSize) {
+    if (capacity >= fSize) {
         for (size_t i = thisSize; i < fSize; i++) {
             Data[i] = Data[i % thisSize];
         }
@@ -108,9 +108,9 @@ String &String::operator*=(unsigned int m) {
         return *this;
     }
 
-    capasity = size_t(fSize * 1.5);
+    capacity = size_t(fSize * 1.5);
 
-    char *tmp = new char[capasity];
+    char *tmp = new char[capacity];
     for (size_t i = 0; i < fSize; i++) {
         tmp[i] = Data[i % thisSize];
     }
@@ -268,21 +268,21 @@ void String::LTrim(char symbol) {
 //Обойдемся без <utility>, раз уж первая даба
 void String::swap(String &oth) {
     char *tmpData = Data;
-    size_t tmpCapasity = capasity;
+    size_t tmpCapasity = capacity;
 
     Data = oth.Data;
-    capasity = oth.capasity;
+    capacity = oth.capacity;
 
     oth.Data = tmpData;
-    oth.capasity = tmpCapasity;
+    oth.capacity = tmpCapasity;
 }
 
 /// Освобождает неиспользуемую память
 
 void String::shrink_to_fit() {
-    capasity = Size() + 1;
-    char *tmp = new char[capasity];
-    for (size_t i = 0; i < capasity; i++) {
+    capacity = Size() + 1;
+    char *tmp = new char[capacity];
+    for (size_t i = 0; i < capacity; i++) {
         tmp[i] = Data[i];
     }
     delete[] Data;
