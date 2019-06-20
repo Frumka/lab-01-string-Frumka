@@ -121,3 +121,12 @@ TEST(String, ConstructAssign1) {
     EXPECT_EQ("other string", s0);
     EXPECT_EQ("some string", s1);
 }
+
+TEST(StringErrors, emptyString){
+    String a;               //Теперь строка по умолчанию имеет 1 элемент - ноль
+    EXPECT_EQ(a.Size(), 0);
+    EXPECT_TRUE(a.Empty());
+    a[0] = 'b';
+    char c = a[0];
+    EXPECT_EQ(c, 'b'); //Строке можно затереть ноль, но очень не рекомендуется
+}

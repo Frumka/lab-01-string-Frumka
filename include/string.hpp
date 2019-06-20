@@ -130,7 +130,7 @@ public:
     friend std::ostream &operator<<(std::ostream &, const String &);
 
 private:
-    char *Data;
+    char *Data = nullptr;
     size_t capasity = 0;
 };
 

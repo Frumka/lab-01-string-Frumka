@@ -5,19 +5,26 @@
 
 /// Деструктор
 String::~String() {
-    if (Data == nullptr) return;
     delete[] Data;
 }
 
 /// Конструктор по умолчанию
 String::String() {
-    Data = nullptr;
+    Data = new char[1];
+    Data[0] = 0;
+    capasity = 1;
 }
 
 /// Конструктор копирования
 String::String(const String &rhs) {
-    Data = nullptr;
-    *this = rhs;
+    delete[] Data;
+    capasity = rhs.capasity;
+    Data = new char[capasity];
+    size_t rSize = rhs.Size();
+    for (size_t i = 0; i < rSize; i++) {
+        Data[i] = rhs.Data[i];
+    }
+    Data[rSize] = 0;
 }
 
 /// Конструктор из *char
@@ -33,8 +40,9 @@ String::String(const char *data) {
 
 /// Оператор присваивания
 String &String::operator=(const String &rhs) {
+    delete[] Data;
     if (this != &rhs) {
-        capasity = size_t((rhs.Size()) + 1 * 1.5);
+        capasity = size_t((rhs.Size() + 1) * 1.5);
         Data = new char[capasity];
         size_t ind = 0;
         while (rhs[ind] != 0) {
@@ -53,7 +61,7 @@ String &String::operator+=(const String &rhs) {
     size_t thisSize = Size();
     size_t fSize = rhs.Size() + thisSize + 1;
     char *tmp;
-    if (fSize < capasity) {
+    if (fSize <= capasity) {
         tmp = new char[capasity];
     } else {
         capasity = size_t(fSize * 1.5);
@@ -68,7 +76,6 @@ String &String::operator+=(const String &rhs) {
     }
     delete[] Data;
     Data = tmp;
-    tmp = nullptr;
     return *this;
 }
 
@@ -87,8 +94,10 @@ String &String::operator+=(const char *rhs) {
 String &String::operator*=(unsigned int m) {
     size_t thisSize = Size();
     size_t fSize = thisSize * m + 1;
-    if (capasity < fSize)
+
+    if (capasity <= fSize)
         capasity = size_t(fSize * 1.5);
+
     char *tmp = new char[capasity];
     for (size_t i = 0; i < fSize; i++) {
         tmp[i] = Data[i % thisSize];
@@ -244,20 +253,16 @@ void String::LTrim(char symbol) {
     }
 }
 
+//Обойдемся без <utility>, раз уж первая даба
 void String::swap(String &oth) {
-    if (this != &oth) {
-        size_t fSize = Size() + 1;
-        char *tmp = new char[capasity];
-        for (size_t ind = 0; ind < fSize; ind++) {
-            tmp[ind] = Data[ind];
-        }
-        delete[] Data;
-        size_t tmpCapasity = capasity;
-        Data = oth.Data;
-        capasity = oth.capasity;
-        oth.Data = tmp;
-        oth.capasity = tmpCapasity;
-    }
+    char *tmpData = Data;
+    size_t tmpCapasity = capasity;
+
+    Data = oth.Data;
+    capasity = oth.capasity;
+
+    oth.Data = tmpData;
+    oth.capasity = tmpCapasity;
 }
 
 /// Освобождает неиспользуемую память
@@ -270,7 +275,6 @@ void String::shrink_to_fit() {
     }
     delete[] Data;
     Data = tmp;
-    tmp = nullptr;
 }
 
 ///outer-class functions
