@@ -62,8 +62,8 @@ String &String::operator+=(const String &rhs) {
     size_t fSize = rhs.Size() + thisSize + 1;
     char *tmp;
     if (fSize <= capasity) {
-        for(size_t i = thisSize; i < fSize;i++)
-            Data[i] = rhs.Data[i-thisSize];
+        for (size_t i = thisSize; i < fSize; i++)
+            Data[i] = rhs.Data[i - thisSize];
 
         Data[fSize] = 0;
         return *this;
@@ -100,11 +100,11 @@ String &String::operator*=(unsigned int m) {
     size_t thisSize = Size();
     size_t fSize = thisSize * m + 1;
 
-    if (capasity >= fSize){
-        for (size_t i = thisSize; i<fSize; i++){
-            Data[i] = Data[i%thisSize];
+    if (capasity >= fSize) {
+        for (size_t i = thisSize; i < fSize; i++) {
+            Data[i] = Data[i % thisSize];
         }
-        Data[fSize]=0;
+        Data[fSize] = 0;
         return *this;
     }
 
